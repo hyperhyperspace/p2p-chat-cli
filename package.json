@@ -1,6 +1,6 @@
 {
   "name": "@hyper-hyper-space/p2p-chat-cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "CLI client for p2p-chat, a chat library based on Hyper Hyper Space.",
   "main": "dist/index.js",
   "repository": "https://github.com/hyperhyperspace/p2p-chat-cli.git",
