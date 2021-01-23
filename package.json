@@ -10,7 +10,7 @@
   "source": "src/index.ts",
   "types": "decl/index.d.ts",
   "scripts": {
-    "build": "npx tsc --module CommonJs --project tsconfig.json --outDir ./dist",
+    "build": "npx tsc",
     "clean": "rm -rf ./decl/* ./dist/*",
     "winclean": "if exist decl (rmdir decl /s /q) && mkdir decl && if exist dist (rmdir dist /s /q) && mkdir dist",
     "start": "NODE_PATH=\"dist\" node ./dist/index.js",
