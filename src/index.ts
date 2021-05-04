@@ -9,14 +9,14 @@ import { Identity, RSAKeyPair, Space, Resources } from '@hyper-hyper-space/core'
 import * as readline from 'readline';
 //import { StateGossipAgent, PeerGroupAgent, ObjectDiscoveryAgent, NetworkAgent, ObjectBroadcastAgent } from '@hyper-hyper-space/core';
 
-function initResources(): Resources {
-    return new Resources();
+async function initResources(): Promise<Resources> {
+    return Resources.create();
 }
 
 async function createIdentity(resources: Resources, name: string): Promise<Identity> {
     console.log();
     console.log('Generating RSA key for ' + name + '...');
-    let key = RSAKeyPair.generate(1024);
+    let key = await RSAKeyPair.generate(1024);
     console.log('Done.');
     let id = Identity.fromKeyPair({name: name}, key);
 
@@ -88,7 +88,7 @@ async function main() {
     //NetworkAgent.connLogger.level = 0;
 
 
-    let resources = initResources();
+    let resources = await initResources();
 
     let rl = readline.createInterface({
         input: process.stdin,
