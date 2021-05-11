@@ -90,38 +90,53 @@ async function main() {
 
     let resources = await initResources();
 
-    let rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+    let nonInteractive = false;
+    let rl: readline.Interface;
+    let name: string;
+    let wordcodeOrBlank: string;
 
-    console.log();
-    let name = await new Promise((resolve: (name: string) => void/*, reject: (reason: any) => void*/) => {
-        rl.question('Enter your name: ', (name: string) => {
-            resolve(name);
+    if (process.argv.length > 2) {
+        nonInteractive = true;
+        name = '';
+        wordcodeOrBlank = process.argv[2] + ' ' + process.argv[3] + ' ' + process.argv[4];
+        console.log('starting in non-interactive mode for wordcode: ' + wordcodeOrBlank);
+    } else {
+        rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
         });
-    });
+    
+        console.log();
+        
+        name = await new Promise((resolve: (name: string) => void/*, reject: (reason: any) => void*/) => {
+            rl.question('Enter your name: ', (name: string) => {
+                resolve(name);
+            });
+        });
+    
+        console.log();
+        console.log('Press enter to create a chat room, or input the 3 code words to join an existing one.');
+        console.log();
+    
+        wordcodeOrBlank = await new Promise((resolve: (text: string) => void/*, reject: (reason: any) => void*/) => {
+            rl.question('>', (command: string) => {
+                resolve(command);
+            });
+        });
+    }
+
+
 
     let id = await createIdentity(resources, name);
 
-    console.log();
-    console.log('Press enter to create a chat room, or input the 3 code words to join an existing one.');
-    console.log();
-
-    let command = await new Promise((resolve: (text: string) => void/*, reject: (reason: any) => void*/) => {
-        rl.question('>', (command: string) => {
-            resolve(command);
-        });
-    });
-
     let space: Space;
-    if (command.trim() === '') {
+    if (wordcodeOrBlank.trim() === '') {
 
         space = await createChatRoomSpace(resources, '');
 
     } else {
 
-        let wordcode: string[] = command.split(' ');
+        let wordcode: string[] = wordcodeOrBlank.split(' ');
 
         if (wordcode.length !== 3) {
             console.log('expected 3 words, like: pineapple greatness flurry');
@@ -134,27 +149,33 @@ async function main() {
 
     let room = await space.getEntryPoint() as ChatRoom;
 
-    room.messages?.onAddition((m: ChatMessage) => {
-        console.log(m.getAuthor()?.info?.name + ': ' + m.text);
-    });
+
+    if (!nonInteractive) {
+        room.messages?.onAddition((m: ChatMessage) => {
+            console.log(m.getAuthor()?.info?.name + ': ' + m.text);
+        });
+    }
+
+
 
     room.messages?.loadAndWatchForChanges();
     room.topic?.loadAndWatchForChanges();
 
-
-
-    console.log('Type and press return to send a message!')
-    console.log();
-
-    while (true) {
-        let text = await new Promise((resolve: (text: string) => void/*, reject: (reason: any) => void*/) => {
-            rl.question('', (name: string) => {
-                resolve(name);
-            });
-        });
+    if (!nonInteractive) {
+        console.log('Type and press return to send a message!')
+        console.log();
     
-        room.say(id, text);
+        while (true) {
+            let text = await new Promise((resolve: (text: string) => void/*, reject: (reason: any) => void*/) => {
+                rl.question('', (name: string) => {
+                    resolve(name);
+                });
+            });
+        
+            room.say(id, text);
+        }
     }
+
 
     
 }
