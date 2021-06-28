@@ -1,6 +1,6 @@
 {
   "name": "@hyper-hyper-space/p2p-chat-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CLI client for p2p-chat, a chat library based on Hyper Hyper Space.",
   "main": "dist/index.js",
   "repository": "https://github.com/hyperhyperspace/p2p-chat-cli.git",
@@ -21,9 +21,9 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
-    "@hyper-hyper-space/core": "0.7.0",
-    "@hyper-hyper-space/p2p-chat": "0.1.0",
-    "@hyper-hyper-space/node-env" : "0.9.0",
+    "@hyper-hyper-space/core": "0.8.0",
+    "@hyper-hyper-space/p2p-chat": "0.2.0",
+    "@hyper-hyper-space/node-env" : "0.10.0",
     "tslib": "^2.0.1",
     "@types/node": "^12.0.0"
   }
