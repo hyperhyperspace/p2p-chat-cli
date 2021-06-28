@@ -2,7 +2,7 @@ import '@hyper-hyper-space/node-env';
 
 import { ChatRoom, ChatMessage } from '@hyper-hyper-space/p2p-chat';
 
-import { Identity, RSAKeyPair, Space, Resources } from '@hyper-hyper-space/core';
+import { Identity, RSAKeyPair, Space, Resources, HashedLiteral } from '@hyper-hyper-space/core';
 
 
 
@@ -31,13 +31,17 @@ async function createIdentity(resources: Resources, name: string): Promise<Ident
 
 async function createChatRoomSpace(resources: Resources, topic?: string): Promise<Space> {
 
-    let chatRoom = new ChatRoom(topic);
+    let chatRoom = new ChatRoom();
 
     let space = Space.fromEntryPoint(chatRoom, resources);
 
     space.startBroadcast();
-    let room = await space.getEntryPoint();
+    let room = await space.getEntryPoint() as ChatRoom;
 
+    if (topic !== undefined) {
+        await room.topic?.setValue(new HashedLiteral(topic));
+    }
+    
     await resources.store.save(room);
 
     room.setResources(resources);
