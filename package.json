@@ -15,16 +15,15 @@
     "winclean": "if exist decl (rmdir decl /s /q) && mkdir decl && if exist dist (rmdir dist /s /q) && mkdir dist",
     "start": "NODE_PATH=\"dist\" node ./dist/index.js",
     "winstart": "./scripts/chat.bat"
-
   },
   "devDependencies": {
     "typescript": "^4.1.2"
   },
   "dependencies": {
     "@hyper-hyper-space/core": "0.8.0",
+    "@hyper-hyper-space/node-env": "0.10.0",
     "@hyper-hyper-space/p2p-chat": "0.2.0",
-    "@hyper-hyper-space/node-env" : "0.10.0",
-    "tslib": "^2.0.1",
-    "@types/node": "^12.0.0"
+    "@types/node": "^12.0.0",
+    "tslib": "^2.0.1"
   }
 }
